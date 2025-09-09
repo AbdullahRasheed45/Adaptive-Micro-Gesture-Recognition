@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gesture-Controlled Whiteboard</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.10.0/dist/tf.min.js"></script>
+    <script>
+    // Ensure TensorFlow.js is loaded before our scripts
+    window.addEventListener('load', function() {
+      console.log('TensorFlow.js version:', tf.version.tfjs);
+    });
+    </script>
+</head>
+<body>
+    <div id="app">
+        <!-- Toolbar -->
+        <div id="toolbar">
+            <div class="toolbar-section">
+                <h1>🎨 Gesture Whiteboard</h1>
+                <div class="status-indicator">
+                    <span id="connection-status" class="status-dot offline"></span>
+                    <span>Camera</span>
+                </div>
+            </div>
+            
+            <div class="toolbar-section">
+                <div class="color-palette">
+                    <div class="color-option active" data-color="#000000" style="background: #000000;"></div>
+                    <div class="color-option" data-color="#ff0000" style="background: #ff0000;"></div>
+                    <div class="color-option" data-color="#00ff00" style="background: #00ff00;"></div>
+                    <div class="color-option" data-color="#0000ff" style="background: #0000ff;"></div>
+                    <div class="color-option" data-color="#ffff00" style="background: #ffff00;"></div>
+                    <div class="color-option" data-color="#ff00ff" style="background: #ff00ff;"></div>
+                    <div class="color-option" data-color="#00ffff" style="background: #00ffff;"></div>
+                    <div class="color-option" data-color="#ffffff" style="background: #ffffff; border: 1px solid #ccc;"></div>
+                </div>
+            </div>
+            
+            <div class="toolbar-section">
+                <button id="undo-btn" class="tool-btn">↶ Undo</button>
+                <button id="redo-btn" class="tool-btn">↷ Redo</button>
+                <button id="clear-btn" class="tool-btn">🗑️ Clear</button>
+                <button id="save-btn" class="tool-btn">💾 Save</button>
+            </div>
+            
+            <div class="toolbar-section">
+                <label for="brush-size">Brush: </label>
+                <input type="range" id="brush-size" min="1" max="50" value="5">
+                <span id="brush-size-value">5px</span>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div id="main-content">
+            <!-- Canvas Container -->
+            <div id="canvas-container">
+                <canvas id="whiteboard-canvas"></canvas>
+                <div id="drawing-mode-indicator">
+                    <span id="mode-text">Ready</span>
+                    <div id="mode-icon">✋</div>
+                </div>
+            </div>
+
+            <!-- Camera Preview -->
+            <div id="camera-container">
+                <video id="camera-feed" autoplay muted playsinline></video>
+                <canvas id="camera-overlay"></canvas>
+                <div id="gesture-info">
+                    <div id="current-gesture">No gesture</div>
+                    <div id="confidence-score">0%</div>
+                    <div id="fps-counter">FPS: 0</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gesture Legend -->
+        <div id="gesture-legend" class="collapsed">
+            <div id="legend-toggle">📋 Gestures</div>
+            <div id="legend-content">
+                <div class="gesture-item">
+                    <span class="gesture-icon">☝️</span>
+                    <span class="gesture-name">Index Finger</span>
+                    <span class="gesture-action">Start Drawing</span>
+                </div>
+                <div class="gesture-item">
+                    <span class="gesture-icon">✊</span>
+                    <span class="gesture-name">Fist</span>
+                    <span class="gesture-action">Stop Drawing</span>
+                </div>
+                <div class="gesture-item">
+                    <span class="gesture-icon">✋</span>
+                    <span class="gesture-name">Open Palm</span>
+                    <span class="gesture-action">Erase</span>
+                </div>
+                <div class="gesture-item">
+                    <span class="gesture-icon">✌️</span>
+                    <span class="gesture-name">Peace</span>
+                    <span class="gesture-action">Zoom In</span>
+                </div>
+                <div class="gesture-item">
+                    <span class="gesture-icon">🤟</span>
+                    <span class="gesture-name">Three Fingers</span>
+                    <span class="gesture-action">Draw Shapes</span>
+                </div>
+                <div class="gesture-item">
+                    <span class="gesture-icon">🤙</span>
+                    <span class="gesture-name">Call</span>
+                    <span class="gesture-action">Save Drawing</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Overlay -->
+        <div id="loading-overlay">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Initializing Camera & AI Model...</div>
+        </div>
+    </div>
+
+    <!-- Load scripts in correct order without module syntax -->
+    <script src="/static/gesture-recognition.js"></script>
+    <script src="/static/whiteboard.js"></script>
+    <script src="/static/app.js"></script>
+</body>
+</html>
+    

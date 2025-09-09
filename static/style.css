@@ -1,0 +1,376 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: #f5f5f5;
+  overflow: hidden;
+  height: 100vh;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* Toolbar Styles */
+#toolbar {
+  background: #2c3e50;
+  color: white;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.toolbar-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.toolbar-section h1 {
+  font-size: 1.2em;
+  margin-right: 15px;
+}
+
+.status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.9em;
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #e74c3c;
+}
+
+.status-dot.online {
+  background: #27ae60;
+}
+
+/* Color Palette */
+.color-palette {
+  display: flex;
+  gap: 5px;
+}
+
+.color-option {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 3px solid transparent;
+  transition: all 0.2s;
+}
+
+.color-option.active {
+  border-color: #fff;
+  transform: scale(1.1);
+}
+
+.color-option:hover {
+  transform: scale(1.05);
+}
+
+/* Tool Buttons */
+.tool-btn {
+  background: #34495e;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: all 0.2s;
+}
+
+.tool-btn:hover {
+  background: #4a6741;
+  transform: translateY(-1px);
+}
+
+.tool-btn:active {
+  transform: translateY(0);
+}
+
+/* Brush Size Control */
+#brush-size {
+  width: 100px;
+}
+
+#brush-size-value {
+  min-width: 40px;
+  font-weight: bold;
+}
+
+/* Main Content */
+#main-content {
+  flex: 1;
+  display: flex;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Canvas Container */
+#canvas-container {
+  flex: 1;
+  position: relative;
+  background: white;
+  margin: 10px;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+#whiteboard-canvas {
+  display: block;
+  cursor: crosshair;
+}
+
+#drawing-mode-indicator {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 10px 15px;
+  border-radius: 25px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: bold;
+  transition: all 0.3s;
+}
+
+#drawing-mode-indicator.drawing {
+  background: rgba(46, 204, 113, 0.9);
+}
+
+#drawing-mode-indicator.erasing {
+  background: rgba(231, 76, 60, 0.9);
+}
+
+#mode-icon {
+  font-size: 1.2em;
+}
+
+/* Camera Container */
+#camera-container {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  width: 300px;
+  height: 225px;
+  background: #000;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  z-index: 100;
+}
+
+#camera-feed {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+#camera-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+#gesture-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+  color: white;
+  padding: 15px 10px 10px;
+  font-size: 0.8em;
+}
+
+#current-gesture {
+  font-weight: bold;
+  font-size: 1.1em;
+  margin-bottom: 2px;
+}
+
+#confidence-score {
+  color: #27ae60;
+  font-weight: bold;
+}
+
+#fps-counter {
+  color: #bdc3c7;
+  font-size: 0.8em;
+}
+
+/* Gesture Legend */
+#gesture-legend {
+  position: absolute;
+  top: 50%;
+  left: 20px;
+  transform: translateY(-50%);
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  z-index: 200;
+  transition: all 0.3s;
+  max-width: 250px;
+}
+
+#gesture-legend.collapsed #legend-content {
+  display: none;
+}
+
+#legend-toggle {
+  padding: 15px;
+  background: #3498db;
+  color: white;
+  cursor: pointer;
+  border-radius: 10px;
+  font-weight: bold;
+  text-align: center;
+}
+
+#legend-toggle:hover {
+  background: #2980b9;
+}
+
+#legend-content {
+  padding: 15px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.gesture-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid #ecf0f1;
+}
+
+.gesture-item:last-child {
+  border-bottom: none;
+}
+
+.gesture-icon {
+  font-size: 1.2em;
+  width: 25px;
+  text-align: center;
+}
+
+.gesture-name {
+  flex: 1;
+  font-weight: 500;
+  font-size: 0.9em;
+}
+
+.gesture-action {
+  font-size: 0.8em;
+  color: #7f8c8d;
+}
+
+/* Loading Overlay */
+#loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  color: white;
+}
+
+#loading-overlay.hidden {
+  display: none;
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid #3498db;
+  border-top: 4px solid transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+}
+
+.loading-text {
+  font-size: 1.1em;
+  text-align: center;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  #toolbar {
+    flex-direction: column;
+    padding: 10px;
+    gap: 10px;
+  }
+
+  .toolbar-section {
+    justify-content: center;
+  }
+
+  #camera-container {
+    width: 200px;
+    height: 150px;
+    bottom: 10px;
+    right: 10px;
+  }
+
+  #gesture-legend {
+    left: 10px;
+    max-width: 200px;
+  }
+}
+
+@media (max-width: 480px) {
+  #camera-container {
+    width: 150px;
+    height: 112px;
+  }
+
+  .color-option {
+    width: 25px;
+    height: 25px;
+  }
+
+  .tool-btn {
+    padding: 6px 10px;
+    font-size: 0.8em;
+  }
+}

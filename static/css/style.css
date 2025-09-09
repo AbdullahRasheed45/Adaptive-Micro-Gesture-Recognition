@@ -1,0 +1,406 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: #f5f5f5;
+  overflow: hidden;
+}
+
+#app {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Toolbar Styles */
+#toolbar {
+  background: #2c3e50;
+  color: white;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+.toolbar-section {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.toolbar-section h1 {
+  font-size: 1.5rem;
+  margin-right: 20px;
+}
+
+.status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.9rem;
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #e74c3c;
+}
+
+.status-dot.online {
+  background: #27ae60;
+}
+
+.toolbar-btn {
+  background: #34495e;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.3s;
+}
+
+.toolbar-btn:hover {
+  background: #4a6741;
+}
+
+.toolbar-btn:active {
+  transform: translateY(1px);
+}
+
+/* Color Palette */
+.color-palette {
+  display: flex;
+  gap: 5px;
+}
+
+.color-swatch {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 3px solid transparent;
+  transition: transform 0.2s;
+}
+
+.color-swatch:hover {
+  transform: scale(1.1);
+}
+
+.color-swatch.active {
+  border-color: #fff;
+  transform: scale(1.2);
+}
+
+/* Brush Size Control */
+#brush-size {
+  width: 100px;
+}
+
+#brush-size-value {
+  min-width: 20px;
+  text-align: center;
+}
+
+/* Main Content */
+#main-content {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Canvas Container */
+#canvas-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background: white;
+}
+
+#whiteboard-canvas {
+  display: block;
+  cursor: crosshair;
+}
+
+/* Zoom Controls */
+#zoom-controls {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#zoom-controls button {
+  background: #3498db;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+#zoom-controls button:hover {
+  background: #2980b9;
+}
+
+#zoom-level {
+  font-weight: bold;
+  min-width: 40px;
+  text-align: center;
+}
+
+/* Camera Overlay */
+#camera-overlay {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 320px;
+  height: 240px;
+  background: #000;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  z-index: 100;
+}
+
+#camera-feed {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+#camera-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+#gesture-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 10px;
+  font-size: 0.9rem;
+}
+
+#current-gesture {
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-bottom: 5px;
+}
+
+#gesture-confidence {
+  color: #27ae60;
+  font-weight: bold;
+}
+
+#drawing-mode {
+  color: #f39c12;
+  margin-top: 5px;
+}
+
+.camera-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.camera-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Gesture Legend */
+#gesture-legend {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  z-index: 200;
+  max-width: 300px;
+  transition: transform 0.3s ease;
+}
+
+#gesture-legend.collapsed .legend-content {
+  display: none;
+}
+
+#legend-toggle {
+  background: #3498db;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  width: 100%;
+}
+
+#legend-toggle:hover {
+  background: #2980b9;
+}
+
+.legend-content {
+  padding: 15px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.legend-content h3 {
+  margin-bottom: 15px;
+  color: #2c3e50;
+  border-bottom: 2px solid #ecf0f1;
+  padding-bottom: 5px;
+}
+
+.gesture-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid #ecf0f1;
+}
+
+.gesture-item:last-child {
+  border-bottom: none;
+}
+
+.gesture-icon {
+  font-size: 1.2rem;
+  width: 30px;
+  text-align: center;
+}
+
+.gesture-name {
+  flex: 1;
+  font-weight: 500;
+  color: #34495e;
+}
+
+.gesture-action {
+  color: #7f8c8d;
+  font-size: 0.9rem;
+}
+
+/* Loading Overlay */
+#loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.loading-content {
+  text-align: center;
+  color: white;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 20px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  #toolbar {
+    flex-direction: column;
+    gap: 10px;
+    padding: 15px;
+  }
+
+  .toolbar-section {
+    justify-content: center;
+  }
+
+  #camera-overlay {
+    width: 200px;
+    height: 150px;
+    top: 10px;
+    right: 10px;
+  }
+
+  #gesture-legend {
+    bottom: 10px;
+    right: 10px;
+    max-width: 250px;
+  }
+}
+
+/* Drawing Mode Indicators */
+.drawing-active #whiteboard-canvas {
+  cursor: crosshair;
+}
+
+.erasing-active #whiteboard-canvas {
+  cursor: grab;
+}
+
+.panning-active #whiteboard-canvas {
+  cursor: move;
+}
+
+/* Gesture Feedback */
+.gesture-detected {
+  animation: pulse 0.5s ease-in-out;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

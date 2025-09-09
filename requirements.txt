@@ -1,0 +1,21 @@
+tensorflow
+mediapipe 
+opencv-python 
+flask 
+flask_cors
+numpy 
+pandas 
+scikit-learn
+keras-tuner
+imblearn
+pyttsx3
+Flask
+Flask-SocketIO
+gevent
+gevent-websocket
+eventlet
+python-socketio
+Pillow
+gunicorn
+tensorflowjs
+-e .
