@@ -119,6 +119,12 @@ class GestureWhiteboard:
         self.gesture_cooldown = 1.0  # seconds
         self.last_gesture_time = 0.0
 
+        # History for undo/redo functionality. We store
+        # snapshots of the canvas after each completed stroke. The
+        # history_index points at the current canvas in the history.
+        self.history: list[np.ndarray] = []
+        self.history_index: int = -1
+
     def preprocess_landmarks(self, landmarks: list[mp.framework.formats.landmark_pb2.NormalizedLandmark]) -> np.ndarray | None:
         """Flatten MediaPipe landmarks to the model input shape.
 
@@ -152,6 +158,15 @@ class GestureWhiteboard:
         if gesture_name == "write_start":
             self.drawing = True
         elif gesture_name == "write_stop":
+            # End of a stroke. Take a snapshot of the canvas for undo/redo
+            # only if we were previously drawing. This avoids pushing
+            # duplicate canvases when "write_stop" is detected multiple
+            # times without a corresponding draw.
+            if self.drawing:
+                # Discard any redo history when a new stroke is made
+                self.history = self.history[: self.history_index + 1]
+                self.history.append(self.canvas.copy())
+                self.history_index = len(self.history) - 1
             self.drawing = False
         elif gesture_name == "erase":
             # Toggle eraser mode
@@ -167,6 +182,18 @@ class GestureWhiteboard:
         elif gesture_name == "clear_all":
             self.canvas[:] = 255
             print("Canvas cleared")
+        elif gesture_name == "undo":
+            # Undo: move back in history if possible
+            if self.history_index > 0:
+                self.history_index -= 1
+                self.canvas = self.history[self.history_index].copy()
+                print("Undo")
+        elif gesture_name == "redo":
+            # Redo: move forward in history if possible
+            if self.history_index < len(self.history) - 1:
+                self.history_index += 1
+                self.canvas = self.history[self.history_index].copy()
+                print("Redo")
         # Other gestures (zoom, undo, redo, shapes, pan) can be added here
 
     def run(self) -> None:
@@ -230,6 +257,43 @@ class GestureWhiteboard:
                 canvas_display = cv2.resize(self.canvas, (frame.shape[1], frame.shape[0]))
                 # Overlay the canvas with some transparency
                 blended = cv2.addWeighted(display, 0.5, canvas_display, 0.5, 0)
+
+                # Annotate the view with mode and colour information
+                mode_text = "Erase" if self.erasing else ("Draw" if self.drawing else "Idle")
+                colour = self.COLOURS[self.current_colour_idx] if not self.erasing else (0, 0, 0)
+                colour_text = f"Colour: BGR({colour[0]}, {colour[1]}, {colour[2]})"
+                gesture_text = f"Last gesture: {self.last_gesture or 'None'}"
+                cv2.putText(
+                    blended,
+                    f"Mode: {mode_text}",
+                    (10, 30),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    0.7,
+                    (0, 0, 0),
+                    2,
+                    lineType=cv2.LINE_AA,
+                )
+                cv2.putText(
+                    blended,
+                    colour_text,
+                    (10, 60),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    0.7,
+                    (0, 0, 0),
+                    2,
+                    lineType=cv2.LINE_AA,
+                )
+                cv2.putText(
+                    blended,
+                    gesture_text,
+                    (10, 90),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    0.7,
+                    (0, 0, 0),
+                    2,
+                    lineType=cv2.LINE_AA,
+                )
+
                 cv2.imshow("Gesture Whiteboard", blended)
                 key = cv2.waitKey(1) & 0xFF
                 if key == ord('q'):
