@@ -9,7 +9,7 @@
 ![Flask](https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
 
-[![Research Paper](https://img.shields.io/badge/Research-Paper-red?style=for-the-badge&logo=adobeacrobatreader)](./research-paper.pdf)
+[![Research Paper](https://img.shields.io/badge/Research-Paper-red?style=for-the-badge&logo=adobeacrobatreader)](https://drive.google.com/file/d/1txAz5fShMmEUoBP0YLINVLcLyi-aDI2s/view?usp=sharing)
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](https://choosealicense.com/licenses/mit/)
 [![Accuracy](https://img.shields.io/badge/Accuracy-94.6%25-brightgreen?style=for-the-badge)]()
 [![F1 Score](https://img.shields.io/badge/F1--Score-94.5%25-brightgreen?style=for-the-badge)]()
@@ -247,47 +247,11 @@ python client.py
 5. **👍 Thumbs Up** → Undo last action
 6. **👎 Thumbs Down** → Redo previous action
 
-#### **Advanced Navigation**
+#### **Advanced Navigation (Optional/Not trained)**
 - **👈👉 Swipe Left/Right** → Pan canvas horizontally
 - **🤏 Pinch Gesture** → Zoom in/out (requires calibration)
 - **✌️ Victory Gesture** → Switch between drawing modes
 
-### 🎛️ **Adaptive Calibration**
-```python
-# Personalized Accessibility Setup
-POST /calibrate
-{
-  "user_id": "unique_identifier",
-  "gestures": {
-    "pinch_threshold": 0.15,     # Adjusted for motor range
-    "swipe_sensitivity": 0.8,    # Micro-movement detection
-    "hold_duration": 1.2         # Extended confirmation time
-  }
-}
-```
-
-### 📊 **API Endpoints**
-```bash
-# Real-time gesture prediction
-POST /predict
-Content-Type: application/json
-{
-  "frames": [base64_frame_array],
-  "user_id": "optional_calibration_id"
-}
-
-# User-specific calibration
-POST /calibrate
-{
-  "user_id": "identifier",
-  "gesture_samples": {...}
-}
-
-# Health check
-GET /health
-```
-
----
 
 ## 📚 **Research Paper & Academic Contribution**
 
@@ -424,11 +388,10 @@ GET /health
 
 ### 🤝 **Interested in Accessibility AI Research?**
 
-[![Research Paper](https://img.shields.io/badge/Read-Research%20Paper-red?style=for-the-badge&logo=adobeacrobatreader)](./research-paper.pdf)
-[![Portfolio](https://img.shields.io/badge/Portfolio-000000?style=for-the-badge&logo=About.me&logoColor=white)](your-portfolio-link)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](your-linkedin)
-[![Scholar](https://img.shields.io/badge/Google-Scholar-4285F4?style=for-the-badge&logo=google-scholar&logoColor=white)](your-google-scholar)
-[![Email](https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:your-email)
+[![Research Paper](https://img.shields.io/badge/Read-Research%20Paper-red?style=for-the-badge&logo=adobeacrobatreader)](https://drive.google.com/file/d/1txAz5fShMmEUoBP0YLINVLcLyi-aDI2s/view?usp=sharing)
+[![Portfolio](https://img.shields.io/badge/Portfolio-000000?style=for-the-badge&logo=About.me&logoColor=white)](https://techvibes360.com)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/abdullahrasheed-/)
+[![Email](https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:abdullahrasheed45@gmail.com)
 
 **Let's advance accessible AI technology together!**
 
@@ -450,7 +413,7 @@ If you use this work in your research, please cite:
   year={2024},
   school={University Name},
   type={Master's Thesis},
-  note={Available at: https://github.com/AbdullahRasheed45/Adaptive-Micro-Gesture-Recognition}
+  note={Available at: https://github.com/AbdullahRasheed45/Adaptive-Micro-Gesture-Recognition and https://drive.google.com/file/d/1txAz5fShMmEUoBP0YLINVLcLyi-aDI2s/view?usp=sharing}
 }
 ```
 
