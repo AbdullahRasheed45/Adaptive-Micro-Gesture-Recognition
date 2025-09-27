@@ -223,15 +223,7 @@ npm start
 # Application available at http://localhost:3000
 ```
 
-#### **3. Desktop Client (Optional)**
-```bash
-# High-performance desktop version
-cd frontend/desktop
-python client.py
 
-# Direct camera access with OpenCV
-# Enhanced performance for research use
-```
 
 ---
 
