@@ -33,8 +33,7 @@ This system implements an adaptive micro-gesture recognition approach designed t
 ## Key Features
 
 ### 3D CNN Architecture
-- **Spatio-temporal Deep Learning:** Custom 3D Convolutional Neural Network processes sequences of 8 video frames
-- **Real-time Performance:** Achieves >20 FPS on smartphones with <40ms inference latency
+- **Spatio-temporal Deep Learning:** Custom 3D Convolutional Neural Network processes sequences of 8 frames
 - **Lightweight Deployment:** 1.2MB TensorFlow Lite model using 8-bit quantization
 
 ### Micro-Gesture Support
