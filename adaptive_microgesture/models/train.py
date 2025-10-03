@@ -34,7 +34,7 @@ X = df.drop('label', axis=1).values
 y = df['label'].values
 y = to_categorical(y, num_classes=12)
 
-# Reshape for 2D CNN (samples, frames, landmarks, coords) with 10 frames
+# Reshape for 3D CNN (samples, frames, landmarks, coords) with 10 frames
 coords = 3
 landmarks = 21  # Based on 630 features (10 * 21 * 3)
 X_base = X.reshape((X.shape[0], 10, landmarks, coords))
@@ -183,3 +183,4 @@ with open(r'D:\Generative AI\Project\Adaptive-Micro-Gesture-Recognition\models\g
 
 # Save full Keras model
 best_model.save(r'D:\Generative AI\Project\Adaptive-Micro-Gesture-Recognition\models\gesture_model_3d_final.keras')
+
